@@ -10,13 +10,15 @@
 </html>
 <script type="text/javascript">
 	function getUserId() {
-	    return new Promises(function (resolve) {
+	    return new Promises(function (resolve, reject) {
 	        resolve(11);
+	        reject(0)
 	    });
 	}
 	getUserId()
-    .then(function(){    //可以执行 可以得到预期结果
-    	return getUserJobById()
+    .then(function(val){    //可以执行 可以得到预期结果
+//  	return getUserJobById()
+		console.log(val)
     })
 //  .then(getUserJobById())  //可以执行 但无法得到预期结果 直接输出第一个成功值
 //	.then(getUserJobById)  //可以执行 可以得到预期结果
