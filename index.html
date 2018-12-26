@@ -9,31 +9,18 @@
 	</body>
 </html>
 <script type="text/javascript">
-	function getUserId() {
-	    return new Promises(function (resolve, reject) {
-	        resolve(11);
-	        reject(0)
-	    });
-	}
-	getUserId()
-    .then(function(val){    //可以执行 可以得到预期结果
-//  	return getUserJobById()
-		console.log(val)
-    })
-//  .then(getUserJobById())  //可以执行 但无法得到预期结果 直接输出第一个成功值
-//	.then(getUserJobById)  //可以执行 可以得到预期结果
-//  .then(function(){   //可以执行 但无法得到预期结果 输出getUserJobById里面的对象
-//  	return getUserJobById
-//  })
-//  .then(function (res) {
-//
-//  });
+	let promise1 = new Promises((resolve, reject) => {
+	  setTimeout(() => {
+	    resolve('success')
+	  }, 200)
+	})
+	let promise2 = promise1.then(res => {
+	  console.log(res)
+	})
+	promise2.then(res => {
+	  console.log(res)
+	}, err => {
+	  console.log(err) //1秒后打印出：这里抛出一个异常e
+	})
 	
-	function getUserJobById(id) {
-	    return new Promises(function (resolve) {
-	        setTimeout(function(){
-	        	resolve(1222)
-	        },2000)
-	    });
-	}
 </script>
