@@ -9,16 +9,5 @@
 	</body>
 </html>
 <script type="text/javascript">
-	let promise1 = new Promises((resolve, reject) => {
-	  setTimeout(() => {
-	    reject('fail')
-	  }, 1000)
-	})
-	promise2 = promise1.then(res => res, '这里的onRejected本来是一个函数，但现在不是')
-	promise2.then(res => {
-	  console.log(res)
-	}, err => {
-	  console.log(err)  // 1秒后打印出：fail
-	})
 
 </script>
