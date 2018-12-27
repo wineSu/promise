@@ -1,7 +1,7 @@
 /**
  * 模拟Promise功能
  * Promises 防止和原生的冲突
- * [2.3.3 ++]测试失败！！
+ * [2.3.3. ++]测试失败！！
  */
 
 const PENDING = 'PENDING'
@@ -248,4 +248,4 @@ class Promises{
 	}
 }
 
-module.exports = Promises
+//module.exports = Promises
