@@ -3,24 +3,25 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<script type="text/javascript" src="Promises.js"></script>
+		<script type="text/javascript" src="myPromise.js"></script>
+		<!--<script type="text/javascript" src="Promises.js"></script>-->
 	</head>
 	<body>
 	</body>
 </html>
 <script type="text/javascript">
-	let promise1 = new Promises((resolve, reject) => {
+	let promise1 = new MyPromise((resolve, reject) => {
+//	let promise1 = new Promises((resolve, reject) => {
 	  setTimeout(() => {
-	    resolve('success')
-	  }, 200)
-	})
-	let promise2 = promise1.then(res => {
-	  console.log(res)
-	})
-	promise2.then(res => {
-	  console.log(res)
-	}, err => {
-	  console.log(err) //1秒后打印出：这里抛出一个异常e
+//	    resolve('222')
+		reject('2222')
+	  },500)
 	})
 	
+	var promise2 = promise1.then(res => {console.log(res)}).catch(err=>{console.log(err)})
+
+	promise2.then(ress => {
+	  console.log(ress)
+	})
+
 </script>

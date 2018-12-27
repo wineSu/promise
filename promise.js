@@ -1,3 +1,7 @@
+/**
+ * 不是很标准的写法  能实现简单的基本需求 可以then内部返回promise
+ * @param {Object} fn
+ */
 function Promises(fn) {
     var state = 'pending',
         value = null,
@@ -15,17 +19,20 @@ function Promises(fn) {
     };
 
     function handle(callback) {
+    	
         if (state === 'pending') {
 	        callbacks.push(callback);
 	        return;
 	    }
-	
 	    var cb = state === 'fulfilled' ? callback.onFulfilled : callback.onRejected,
 	        ret;
 	    if (cb === null) {
 	        cb = state === 'fulfilled' ? callback.resolve : callback.reject;
 	        cb(value);
 	        return;
+	    }
+	    if(typeof cb === 'string' || typeof cb === 'number'){
+	    	return callback.resolve(value);
 	    }
 	    try {
 	        ret = cb(value);
