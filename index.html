@@ -9,5 +9,48 @@
 	</body>
 </html>
 <script type="text/javascript">
-
+	/**
+	 * 2.2.1 onFulfilled和onRejected都是可选的
+	 * ** promise.then(onFulfilled, onRejected) 
+	 * ** 1.如果onFulfilled不是一个函数，则忽略之
+	 
+			var Pro = new Promises((resolve, reject)=>{
+				setTimeout(()=>{
+					resolve('success！')
+				},500)
+			})
+			
+		    Pro.then(11,(err)=>{
+		        console.log(err)
+		    })
+		    .then(222,(data)=>{
+		        console.log(data)
+		    })
+		    .then((data)=>{
+		    	alert(data) //success!
+		    })
+		    
+	 * ** 2.如果onRejected不是一个函数，则忽略之。
+	 
+	 		var Pro = new Promises((resolve, reject)=>{
+				setTimeout(()=>{
+					resolve('success！')
+				},500)
+			})
+			
+		    Pro.then(11,22)
+		    .then(222,22)
+		    .then(33,function(data){
+		    	alert(data)  //不执行
+		    })
+		          或
+		    Pro.then(11,22)
+		    .then(222,22)
+		    .then((data)=>{
+		    	alert(data)  //success！
+		    })
+		    
+	 * 2.2.2 如果onFulfilled是一个函数:
+    */
+   
 </script>

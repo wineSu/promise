@@ -102,7 +102,6 @@ class Promises{
  	}
  	
  	then(onFulfilled, onRejected){
- 		
  		//状态已经发生改变并且参数不是函数时
 		if (typeof onFulfilled !== 'function' && this.state === FULFILLED ||
 			typeof onRejected !== 'function' && this.state === REJECTED) {
@@ -112,10 +111,11 @@ class Promises{
 		const {data, state} = this;
 
  		return new Promises((onFulfilledNext, onRejectedNext) => {
-
  			// 成功时执行的函数
 	        let fulfilled = value => {
 	          try {
+	          	//[2.2.1.1] onFulfilled不为函数则下递执行内部resolve方法  直到它为一个函数为止  得到外部（外部调用时候）resolve成功的值
+	          	//[2.2.1.2] onRejected不为函数则下递执行内部resolve方法  直到它为一个函数为止  得到外部resolve成功的值
 	            if (typeof onFulfilled !== 'function') {
 	              onFulfilledNext(value)
 	            } else {
@@ -137,6 +137,7 @@ class Promises{
 	        // 失败时执行的函数
 	        let rejected = error => {
 	          try {
+	          	
 	            if (typeof onRejected !== 'function') {
 	              onRejectedNext(error)
 	            } else {
