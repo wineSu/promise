@@ -32,7 +32,8 @@ class Promises{
  	}
  	
  	executeResolver(resolver){
- 		let flag = false;
+ 		
+ 		let flag = false; //[2.2.2.3] [2.2.3.3]  只允许执行单次
  		
  		let onSuccess = val => {
  			if(flag){
@@ -59,6 +60,7 @@ class Promises{
  	}
  	
  	executeCallback(type, val){
+ 		//
  		setTimeout(()=>{
  			let isResolve = type === 'resolve';
 	 		this.state = isResolve ? FULFILLED : REJECTED;
@@ -79,7 +81,7 @@ class Promises{
 		        callback(error)
 		      }
 		    }
-		   	
+		   	console.log(val === Promises)
 		   	//成功处理
 	 		if(isResolve){
 			    //返回一个promise对象
@@ -102,6 +104,7 @@ class Promises{
  	}
  	
  	then(onFulfilled, onRejected){
+ 		
  		//状态已经发生改变并且参数不是函数时
 		if (typeof onFulfilled !== 'function' && this.state === FULFILLED ||
 			typeof onRejected !== 'function' && this.state === REJECTED) {
@@ -109,7 +112,8 @@ class Promises{
 		}
 
 		const {data, state} = this;
-
+		
+		//[2.2.7]
  		return new Promises((onFulfilledNext, onRejectedNext) => {
  			// 成功时执行的函数
 	        let fulfilled = value => {
@@ -158,7 +162,9 @@ class Promises{
 
  			switch (state){
 	 			case PENDING :
+	 				//[2.2.2 .] [2.2.6]
 	 				this.onFulfilledQueue.push(fulfilled);
+	 				//[2.2.3 .]
 	 				this.onRejectedQueue.push(rejected);
 	 			break
 	 			
@@ -173,7 +179,6 @@ class Promises{
 	 			default:
 	 			break
 	 		}
-
   		});
   		
  	}
@@ -209,7 +214,9 @@ class Promises{
             values[i] = res
             count++
             // 所有状态都变成fulfilled时返回的Promises状态就变成fulfilled
-            if (count === list.length) resolve(values)
+            if (count === list.length){
+            	resolve(values)
+            } 
           }, err => {
             // 有一个被rejected时返回的Promises状态就变成rejected
             reject(err)
