@@ -199,16 +199,49 @@
 	 * 2.3 Promise解析过程 是以一个promise和一个值做为参数的抽象过程，可表示为[[Resolve]](promise, x). 
 	 	** 1.如果promise 和 x 指向相同的值, 使用 TypeError做为原因将promise拒绝。
 	 		
+	 		var defer = {}
+			var promise = new Promises(function(resolve){ 
+			    defer.resolve = resolve
+			})
+			promise.catch(function(reason){
+			    console.log(reason)  //TypeError: resolve 参数不能为实例本身！
+			})
+			defer.resolve(promise)
+			
+	    ** 2. 如果val是一个promise对象，且是基于当前实现创建的。
 	 		
-	 		
+	 		** 1. 如果val处于pending状态，则promise同样pending并直到val状态改变。
+	 		** 2. 如果value处于fulfilled状态，则使用相同的value值fulfill promise。
+			** 3. 如果value处于rejected状态，则使用相同的reason值reject promise。
+	 			
+	 			var promise1 = new Promise((resolve) => {
+				    setTimeout(() => {
+				        resolve(5)
+				    },3000)
+				});
+				console.time('fulfill')
+				var promise = new Promise((resolve) => {
+				    resolve(promise1)
+				})
+				promise.then((value) => {
+				    console.timeEnd('fulfill')
+				    console.log('fulfill', value)
+				})
+				setTimeout(()=>{
+				    console.log('setTimeout', promise)
+				}, 1000)
+	 	
+	 	** 3. 如果 then 是一个函数， 以x为this调用then函数， 且第一个参数是resolvePromise，第二个参数是rejectPromise，且：
     */
+	  	new Promises((resolve)=>{
+		    resolve({then:(()=>{
+		        throw new Error('error')
+		        })()
+		    })
+		}).catch((reason)=>{
+		    console.log(reason)
+		})
+	// Error: error(…)
   	
-  	var defer = {}
-	var promise = new Promises(function(resolve){ 
-	    defer.resolve = resolve
-	})
-	promise.catch(function(reason){
-//	    console.log(defer)
-	})
-	defer.resolve(promise)
+
 </script>

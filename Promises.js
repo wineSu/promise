@@ -32,7 +32,7 @@ class Promises{
  	}
  	
  	executeResolver(resolver){
- 		
+
  		let flag = false; //[2.2.2.3] [2.2.3.3]  只允许执行单次
  		
  		let onSuccess = val => {
@@ -60,12 +60,13 @@ class Promises{
  	}
  	
  	executeCallback(type, val){
- 		//
+ 		
  		setTimeout(()=>{
+ 			
  			let isResolve = type === 'resolve';
 	 		this.state = isResolve ? FULFILLED : REJECTED;
 	 		this.data = val;
-	 		
+
 	 		// 依次执行成功队列中的函数，并清空队列
 		    const runFulfilled = (value) => {
 		      let callback;
@@ -81,14 +82,19 @@ class Promises{
 		        callback(error)
 		      }
 		    }
-		   	console.log(val === Promises)
+		    
+		    //[2.3.1]  相同的结果 但是测试是没有通过
+		    if(this === val){
+ 				return runRejected(new TypeError('resolve 参数不能为实例本身！'))
+ 			}
+		    
 		   	//成功处理
 	 		if(isResolve){
-			    //返回一个promise对象
+			    //[2.3.2 ++]返回一个promise对象
 			    if (val instanceof Promises) {
 		          val.then(value => {
-		            this.data = value
-		            runFulfilled(value)
+		          	this.data = value
+	            	runFulfilled(value)
 		          }, err => {
 		            this.data = err
 		            runRejected(err)
@@ -112,9 +118,8 @@ class Promises{
 		}
 
 		const {data, state} = this;
-		
 		//[2.2.7]
- 		return new Promises((onFulfilledNext, onRejectedNext) => {
+ 		 return new Promises((onFulfilledNext, onRejectedNext) => {
  			// 成功时执行的函数
 	        let fulfilled = value => {
 	          try {
@@ -141,7 +146,6 @@ class Promises{
 	        // 失败时执行的函数
 	        let rejected = error => {
 	          try {
-	          	
 	            if (typeof onRejected !== 'function') {
 	              onRejectedNext(error)
 	            } else {
@@ -181,6 +185,10 @@ class Promises{
 	 		}
   		});
   		
+ 	}
+ 	
+ 	resolvePromise(child, x, resolve, reject){
+ 		
  	}
  	
  	// 添加catch方法
@@ -256,4 +264,4 @@ class Promises{
 	}
 }
 
-//module.exports = Promises
+module.exports = Promises
