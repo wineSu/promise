@@ -233,15 +233,6 @@
 	 	
 	 	** 3. 如果 then 是一个函数， 以x为this调用then函数， 且第一个参数是resolvePromise，第二个参数是rejectPromise，且：
     */
-	  	new Promises((resolve)=>{
-		    resolve({then:(()=>{
-		        throw new Error('error')
-		        })()
-		    })
-		}).catch((reason)=>{
-		    console.log(reason)
-		})
-	// Error: error(…)
-  	
+	  	
 
 </script>
