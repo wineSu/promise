@@ -3,12 +3,13 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<script type="text/javascript" src="Promises.js"></script>
+		<script type="text/javascript" src="promise.js"></script>
 	</head>
 	<body>
 	</body>
 </html>
 <script type="text/javascript">
+	
 	/**
 	 * 2.2.1 onFulfilled和onRejected都是可选的
 	 * ** promise.then(onFulfilled, onRejected) 
@@ -231,8 +232,96 @@
 				    console.log('setTimeout', promise)
 				}, 1000)
 	 	
-	 	** 3. 如果 then 是一个函数， 以x为this调用then函数， 且第一个参数是resolvePromise，第二个参数是rejectPromise，且：
+	 	** 3. 如果value是一个对象或函数
+	 	* 	  **.1 使then等于value.then
+			  **.2 如果获取value.then的值时抛出异常，这通过该异常reject promise，例：
+			  	new Promise((resolve)=>{
+				    resolve({then:(()=>{
+				        throw new Error('error')
+				        })()
+				    })
+				}).catch((reason)=>{
+				    console.log(reason)
+				})
+				
+			  **.3 如果then是一个函数，则把value作为函数中this指向来调用它，第一个参数是resolvePromise，第二个参数是rejectPromise。
+			  	**.1 如果resolvePromise通过传入y来调用，则执行resolve(promise, y)，例：
+			  		new Promise((resolve)=>{
+					    resolve({then:(resolvePromise, rejectPromise)=>{
+					        resolvePromise(5)
+					        }
+					    })
+					}).then((value)=>{
+					    console.log(value)
+					})
+				**.2如果rejectPromise 通过传入原因r来调用，则传入r来reject promise，例：
+			  		new Promise((resolve)=>{
+					    resolve({then:(resolvePromise, rejectPromise)=>{
+					        rejectPromise(new Error('error'))
+					        }
+					    })
+					}).catch((reason)=>{
+					    console.log(reason)
+					})
+				**.3如果resolvePromise和rejectPromise都被调用，或其中一个被调用了多次，则以第一次调用的为准，并忽略之后的调用。例：
+			  		new Promise((resolve)=>{
+					    resolve({then:(resolvePromise, rejectPromise)=>{
+					        resolvePromise(5)
+					        rejectPromise(new Error('error'))
+					        }
+					    })
+					}).then((value)=>{
+					    console.log(value)
+					}, (reason)=>{
+					    console.log(reason)
+					})
+		     
+		      **.4 如果调用then抛出异常e:
+			  	*.1 如果resolvePromise或rejectPromise已经调用，则忽略它，例：
+			  		new Promise((resolve)=>{
+					    resolve({then:(resolvePromise, rejectPromise)=>{
+					        resolvePromise(5)
+					        throw new Error('error')
+					        }
+					    })
+					}).then((value)=>{
+					    console.log(value)
+					}, (reason)=>{
+					    console.log(reason)
+					})
+				**.2 否则，则传入e来reject promise，例：
+			  		new Promise((resolve)=>{
+					    resolve({then:(resolvePromise, rejectPromise)=>{
+					        throw new Error('error')
+					        }
+					    })
+					}).then((value)=>{
+					    console.log(value)
+					}, (reason)=>{
+					    console.log(reason)
+					})
+				**.3如果resolvePromise和rejectPromise都被调用，或其中一个被调用了多次，则以第一次调用的为准，并忽略之后的调用。例：
+			  		new Promise((resolve)=>{
+					    resolve({then:(resolvePromise, rejectPromise)=>{
+					        resolvePromise(5)
+					        rejectPromise(new Error('error'))
+					        }
+					    })
+					}).then((value)=>{
+					    console.log(value)
+					}, (reason)=>{
+					    console.log(reason)
+					})
+					
+		**4.如果then不是一个函数，则传入value来fulfill promise，例：
+		* 	new Promise((resolve)=>{
+			    resolve({then:5})
+			}).then((value)=>{
+			    console.log(value)
+			}, (reason)=>{
+			    console.log(reason)
+			})
+		* 
     */
-	  	
 
 </script>
