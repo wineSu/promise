@@ -200,14 +200,11 @@
 	 * 2.3 Promise解析过程 是以一个promise和一个值做为参数的抽象过程，可表示为[[Resolve]](promise, x). 
 	 	** 1.如果promise 和 x 指向相同的值, 使用 TypeError做为原因将promise拒绝。
 	 		
-	 		var defer = {}
-			var promise = new Promises(function(resolve){ 
-			    defer.resolve = resolve
-			})
-			promise.catch(function(reason){
-			    console.log(reason)  //TypeError: resolve 参数不能为实例本身！
-			})
-			defer.resolve(promise)
+	 		const promise = Promises.resolve().then(()=>{
+				return promise;
+			});
+
+			promise.catch(console.error);
 			
 	    ** 2. 如果val是一个promise对象，且是基于当前实现创建的。
 	 		
