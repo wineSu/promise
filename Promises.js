@@ -71,8 +71,9 @@ function Promise(excutor) {
  * @param  {[type]} reject    promise2的reject方法
  */
 function resolvePromise(promise2, x, resolve, reject) {
-    if (promise2 === x) {  // 如果从onFulfilled中返回的x 就是promise2 就会导致循环引用报错
-        return reject(new TypeError('循环引用'));
+    if (promise2 === x) {  
+        // 如果从onFulfilled中返回的x 就是promise2 根据规范拒绝
+        return reject(new TypeError('Chaining cycle detected for promise #<Promise>'));
     }
 
     let called = false; // 避免多次调用
@@ -149,8 +150,7 @@ Promise.prototype.then = function(onFulfilled, onRejected) {
     //     console.log('当前执行栈中同步代码');
     // })
     // console.log('全局执行栈中同步代码');
-    //
-
+  
     if (that.status === FULFILLED) { // 成功态
         return newPromise = new Promise((resolve, reject) => {
             setTimeout(() => {
